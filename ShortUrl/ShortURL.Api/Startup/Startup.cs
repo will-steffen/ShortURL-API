@@ -57,9 +57,12 @@ namespace ShortURL.Api
         }
 
         private void RunMigrations()
-        {
-            ApplicationContext ctx = Activator.CreateInstance<ApplicationContext>();
-            ctx.Database.Migrate();
+        {            
+            if (!ApplicationEnv.GetBoolConfiguration(Constants.USE_MEMORY_DB))
+            {
+                ApplicationContext ctx = Activator.CreateInstance<ApplicationContext>();
+                ctx.Database.Migrate();
+            }
         }
     }
 }

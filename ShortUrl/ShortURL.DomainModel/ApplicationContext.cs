@@ -7,14 +7,8 @@ using System.Text;
 
 namespace ShortURL.DomainModel
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationContext : ConfigApplicationContext
     {
-        public DbSet<ShortUrl> ShortUrl { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            string connString = ApplicationEnv.GetConfiguration().GetValue<string>(Constants.DEFAULT_CONNECTION);
-            optionsBuilder.UseMySql(connString);
-        }
+        public DbSet<ShortUrl> ShortUrl { get; set; }    
     }
 }

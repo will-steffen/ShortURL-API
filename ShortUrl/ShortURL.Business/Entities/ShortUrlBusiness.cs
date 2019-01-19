@@ -31,7 +31,7 @@ namespace ShortURL.Business.Entities
 
         private string GetNewCode()
         {
-            int length = ApplicationEnv.GetConfiguration().GetValue<int>(Constants.SHORT_URL_CODE_LENGTH);
+            int length = ApplicationEnv.GetIntConfiguration(Constants.SHORT_URL_CODE_LENGTH);
             string code = TokenUtils.GenerateCode(length);
             while (DataAccess.GetByCode(code) != null)
             {

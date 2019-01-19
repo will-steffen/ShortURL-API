@@ -33,7 +33,7 @@ namespace ShortURL.Api.Controllers
                 {
                     return Redirect(url.Original);
                 }
-                return Redirect(ApplicationEnv.GetConfiguration().GetValue<string>(Constants.NOT_FOUND_REDIRECT_URL));
+                return Redirect(ApplicationEnv.GetStringConfiguration(Constants.NOT_FOUND_REDIRECT_URL));
             }
             catch (ShortUrlException e)
             {

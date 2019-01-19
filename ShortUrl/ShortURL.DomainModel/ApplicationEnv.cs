@@ -27,5 +27,34 @@ namespace ShortURL.DomainModel
         {
             return $"{httpContext.Request.Scheme}://{httpContext.Request.Host.Value}";
         }
+
+        public static string GetStringConfiguration(string key)
+        {
+            string value = Environment.GetEnvironmentVariable(GetAzureKeyString(key));
+            if (value == null)
+            {
+                IConfigurationRoot config = GetConfiguration();
+                value = config.GetValue<string>(key);
+            }
+            return value;
+        }
+
+        public static bool GetBoolConfiguration(string key)
+        {
+            string value = GetStringConfiguration(key);
+            return Constants.TRUE.Equals(value) || Constants.TRUE.ToLower().Equals(value);
+        }
+
+        public static int GetIntConfiguration(string key)
+        {
+            string value = GetStringConfiguration(key);
+            if (value == null) return 0;
+            return Int32.Parse(value);
+        }   
+
+        private static string GetAzureKeyString(string key)
+        {
+            return key.Replace(":", ".");
+        }
     }
 }
