@@ -29,6 +29,7 @@ namespace ShortURL.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            AddCors(services);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<ApplicationContext>();
@@ -51,7 +52,7 @@ namespace ShortURL.Api
             {
                 app.UseHsts();
             }
-
+            app.UseCors(Constants.CORS_POLICY_NAME);
             //app.UseHttpsRedirection();
             app.UseMvc();
         }
@@ -63,6 +64,16 @@ namespace ShortURL.Api
                 ApplicationContext ctx = Activator.CreateInstance<ApplicationContext>();
                 ctx.Database.Migrate();
             }
+        }
+
+        private void AddCors(IServiceCollection services)
+        {
+            services.AddCors(o => o.AddPolicy(Constants.CORS_POLICY_NAME, builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
         }
     }
 }

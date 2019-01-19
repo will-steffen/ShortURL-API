@@ -34,6 +34,7 @@ namespace ShortURL.DomainModel.Utils
             string code = GenerateSalt();
             code = code.Replace("+", "");
             code = code.Replace("=", "");
+            code = code.Replace("/", "");
             return code.Substring(0, length);
         }
     }

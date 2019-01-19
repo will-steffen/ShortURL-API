@@ -26,9 +26,25 @@ namespace ShortURL.Api.Controllers
         {
             try
             {
-                string code = ShortUrlBusiness.MakeShortUrl(payload.original).Code;
-                payload.shortUrl = $"{ApplicationEnv.GetApiUrl(HttpContext)}/{code}";                
-                return Ok(payload);
+                string code = ShortUrlBusiness.MakeShortUrl(payload.url).Code;
+                ShortUrlDTO dto = new ShortUrlDTO();
+                dto.original = payload.url;
+                dto.shortUrl = $"{ApplicationEnv.GetApiUrl(HttpContext)}/{code}";
+                return Ok(dto);
+            }
+            catch (ShortUrlException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("{url}")]
+        public ActionResult Get(string url)
+        {
+            try
+            {
+                string code = ShortUrlBusiness.MakeShortUrl(url).Code;
+                return Ok($"{ApplicationEnv.GetApiUrl(HttpContext)}/{code}");
             }
             catch (ShortUrlException e)
             {

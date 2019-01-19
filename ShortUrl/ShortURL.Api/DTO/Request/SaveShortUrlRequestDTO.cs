@@ -8,7 +8,6 @@ namespace ShortURL.Api.DTO.Entities
 {
     public class SaveShortUrlRequestDTO
     {
-        public string original { get; set; } 
-        public string shortUrl { get; set; }
+        public string url { get; set; } 
     }
 }
