@@ -56,8 +56,9 @@ namespace ShortURL.Business.Entities
         }
 
         public List<ShortUrl> GetLastByIdUser(long userId)
-        {            
-            return DataAccess.GetLastByIdUser(userId, 2).ToList();
+        {
+            int countLastToShow = 2; // This could be as system parameter 
+            return DataAccess.GetLastByIdUser(userId, countLastToShow).ToList();
         }
 
         private string GetNewCode()
@@ -79,6 +80,14 @@ namespace ShortURL.Business.Entities
                 Ip = ApplicationEnv.GetClientIP(httpContext)
             };
             ClickBusiness.Save(click);
+            return url;
+        }
+
+        public ShortUrl Stats(string code)
+        {
+            ShortUrl url = FindByCode(code);
+            int clicksToShow = 10; // This could be as system parameter 
+            url.ClickList = ClickBusiness.GetByShortUrlCode(code, clicksToShow);
             return url;
         }
     }

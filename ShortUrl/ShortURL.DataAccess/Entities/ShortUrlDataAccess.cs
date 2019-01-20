@@ -1,4 +1,5 @@
-﻿using ShortURL.DomainModel;
+﻿using Microsoft.EntityFrameworkCore;
+using ShortURL.DomainModel;
 using ShortURL.DomainModel.Entities;
 using System;
 using System.Collections.Generic;
@@ -20,5 +21,6 @@ namespace ShortURL.DataAccess.Entities
         {
             return GetBaseQueryable().Where(x => x.IdUser == userId).OrderByDescending(x => x.Id).Take(count);
         }
+        
     }
 }

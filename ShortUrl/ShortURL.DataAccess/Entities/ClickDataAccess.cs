@@ -15,5 +15,13 @@ namespace ShortURL.DataAccess.Entities
         {
             return GetBaseQueryable().Where(x => x.ShortUrl.Code.Equals(code)).Count();
         }
+
+        public IEnumerable<Click> GetByShortUrlCode(string code, int count)
+        {
+            return GetBaseQueryable()
+                .Where(x => x.ShortUrl.Code.Equals(code))
+                .OrderByDescending(x => x.Id)
+                .Take(count);
+        }
     }
 }

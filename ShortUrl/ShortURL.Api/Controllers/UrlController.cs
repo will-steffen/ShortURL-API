@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using ShortURL.Api.DTO.Entities;
 using ShortURL.Business.Entities;
@@ -72,5 +73,39 @@ namespace ShortURL.Api.Controllers
             }
         }
 
+        [HttpGet("stats/{code}")]
+        public ActionResult GetStats(string code)
+        {
+            try
+            {
+                string host = ApplicationEnv.GetApiUrl(HttpContext);
+                ShortUrl url = ShortUrlBusiness.Stats(code);
+                var dto = new ShortUrlDTO(url, host, fullData: true);
+                dto.countClick = ClickBusiness.CountClicksByCode(code);
+                return Ok(dto);
+            }
+            catch (ShortUrlException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("metadata-title/{code}")]
+        public ActionResult GetMetadataTitle(string code)
+        {
+            try
+            {
+                WebClient x = new WebClient();
+                string source = x.DownloadString(ShortUrlBusiness.FindByCode(code).Original);
+                string title = Regex.Match(source, @"\<title\b[^>]*\>\s*(?<Title>[\s\S]*?)\</title\>", RegexOptions.IgnoreCase).Groups["Title"].Value;
+                return Ok(new { title });
+            }
+            catch (ShortUrlException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        
     }
 }
