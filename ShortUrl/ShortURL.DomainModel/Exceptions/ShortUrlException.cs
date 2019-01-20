@@ -8,5 +8,10 @@ namespace ShortURL.DomainModel.Exceptions
     {
         public ShortUrlException() { }
         public ShortUrlException(string message) : base(message) { }
+
+        public void Ship()
+        {
+            // Integration with some monitoring tool;
+        }
     }
 }

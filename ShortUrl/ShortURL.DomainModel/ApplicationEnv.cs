@@ -29,6 +29,11 @@ namespace ShortURL.DomainModel
             return $"{scheme}://{httpContext.Request.Host.Value}";
         }
 
+        public static string GetClientIP(HttpContext httpContext)
+        {
+            return httpContext.Connection.RemoteIpAddress.ToString();
+        }
+
         public static string GetStringConfiguration(string key)
         {
             string value = Environment.GetEnvironmentVariable(GetAzureKeyString(key));
@@ -57,5 +62,7 @@ namespace ShortURL.DomainModel
         {
             return key.Replace(":", ".");
         }
+
+        
     }
 }

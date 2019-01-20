@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace ShortURL.Api.DTO.Entities
 {
-    public class SaveShortUrlRequestDTO
+    public class UserDTO
     {
-        public string url { get; set; } 
-        public long? userId { get; set; }
+        public long id { get; set; }
+
+        public UserDTO() { }
+
+        public UserDTO(User user)
+        {
+            id = user.Id;
+        }
     }
 }

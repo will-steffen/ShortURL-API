@@ -17,10 +17,12 @@ namespace ShortURL.Api.Controllers
     public class UrlController : ControllerBase
     {
         private ShortUrlBusiness ShortUrlBusiness;
+        private ClickBusiness ClickBusiness;
 
-        public UrlController(ShortUrlBusiness shortBusiness)
+        public UrlController(ShortUrlBusiness shortBusiness, ClickBusiness clickBusiness)
         {
             ShortUrlBusiness = shortBusiness;
+            ClickBusiness = clickBusiness;
         }
 
         [HttpPost]
@@ -28,14 +30,13 @@ namespace ShortURL.Api.Controllers
         {
             try
             {
-                ShortUrl shortUrl = ShortUrlBusiness.MakeShortUrl(payload.url);
-                ShortUrlDTO dto = new ShortUrlDTO();
-                dto.original = shortUrl.Original;
-                dto.shortUrl = $"{ApplicationEnv.GetApiUrl(HttpContext)}/{shortUrl.Code}";
+                ShortUrl shortUrl = ShortUrlBusiness.MakeShortUrl(payload.url, payload.userId);
+                ShortUrlDTO dto = new ShortUrlDTO(shortUrl, ApplicationEnv.GetApiUrl(HttpContext));
                 return Ok(dto);
             }
             catch(InvalidUrlException e)
             {
+                e.Ship();
                 return StatusCode((int)HttpStatusCode.NotAcceptable);
             }
             catch (ShortUrlException e)
@@ -44,18 +45,32 @@ namespace ShortURL.Api.Controllers
             }
         }
 
-        [HttpGet("{url}")]
-        public ActionResult Get(string url)
+        [HttpGet("count/{code}")]
+        public ActionResult GetCount(string code)
         {
             try
             {
-                string code = ShortUrlBusiness.MakeShortUrl(url).Code;
-                return Ok($"{ApplicationEnv.GetApiUrl(HttpContext)}/{code}");
+                return Ok(ClickBusiness.CountClicksByCode(code));
             }
             catch (ShortUrlException e)
             {
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpGet("last/{userId}")]
+        public ActionResult GetLast(long userId)
+        {
+            try
+            {
+                string host = ApplicationEnv.GetApiUrl(HttpContext);
+                return Ok(ShortUrlBusiness.GetLastByIdUser(userId).Select(x => new ShortUrlDTO(x, host)));
+            }
+            catch (ShortUrlException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
     }
 }

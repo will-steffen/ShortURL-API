@@ -10,5 +10,7 @@ namespace ShortURL.DomainModel
     public class ApplicationContext : ConfigApplicationContext
     {
         public DbSet<ShortUrl> ShortUrl { get; set; }    
+        public DbSet<Click> Click { get; set; }
+        public DbSet<User> User { get; set; }
     }
 }

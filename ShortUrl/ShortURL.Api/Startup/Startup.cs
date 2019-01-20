@@ -35,8 +35,12 @@ namespace ShortURL.Api
             services.AddDbContext<ApplicationContext>();
 
             services.AddScoped<ShortUrlBusiness>();
+            services.AddScoped<ClickBusiness>();
+            services.AddScoped<UserBusiness>();
 
             services.AddScoped<ShortUrlDataAccess>();
+            services.AddScoped<ClickDataAccess>();
+            services.AddScoped<UserDataAccess>();
 
             RunMigrations();
         }

@@ -28,21 +28,18 @@ namespace ShortURL.Api.Controllers
         {
             try
             {
-                ShortUrl url = ShortUrlBusiness.FindByCode(code);
-                if(url != null)
-                {
-                    return Redirect(url.Original);
-                }
+                ShortUrl url = ShortUrlBusiness.Clicked(code, HttpContext);
+                return Redirect(url.Original);
+            }
+            catch (ShortUrlException e)
+            {
+                e.Ship();
                 string redirect = ApplicationEnv.GetStringConfiguration(Constants.NOT_FOUND_REDIRECT_URL);
                 if (ApplicationEnv.GetBoolConfiguration(Constants.NOT_FOUND_REDIRECT_INCLUDE_CODE))
                 {
                     redirect += "/" + code;
                 }
                 return Redirect(redirect);
-            }
-            catch (ShortUrlException e)
-            {
-                return BadRequest(e.Message);
             }
         }
     }
