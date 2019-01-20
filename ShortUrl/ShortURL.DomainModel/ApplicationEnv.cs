@@ -25,7 +25,8 @@ namespace ShortURL.DomainModel
 
         public static string GetApiUrl(HttpContext httpContext)
         {
-            return $"{httpContext.Request.Scheme}://{httpContext.Request.Host.Value}";
+            string scheme = GetBoolConfiguration(Constants.FORCE_HTTPS_LINK) ? "https" : httpContext.Request.Scheme;
+            return $"{scheme}://{httpContext.Request.Host.Value}";
         }
 
         public static string GetStringConfiguration(string key)

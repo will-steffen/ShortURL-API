@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using ShortURL.Api.DTO.Entities;
 using ShortURL.Business.Entities;
 using ShortURL.DomainModel;
+using ShortURL.DomainModel.Entities;
 using ShortURL.DomainModel.Exceptions;
 
 namespace ShortURL.Api.Controllers
@@ -26,11 +28,15 @@ namespace ShortURL.Api.Controllers
         {
             try
             {
-                string code = ShortUrlBusiness.MakeShortUrl(payload.url).Code;
+                ShortUrl shortUrl = ShortUrlBusiness.MakeShortUrl(payload.url);
                 ShortUrlDTO dto = new ShortUrlDTO();
-                dto.original = payload.url;
-                dto.shortUrl = $"{ApplicationEnv.GetApiUrl(HttpContext)}/{code}";
+                dto.original = shortUrl.Original;
+                dto.shortUrl = $"{ApplicationEnv.GetApiUrl(HttpContext)}/{shortUrl.Code}";
                 return Ok(dto);
+            }
+            catch(InvalidUrlException e)
+            {
+                return StatusCode((int)HttpStatusCode.NotAcceptable);
             }
             catch (ShortUrlException e)
             {

@@ -2,6 +2,7 @@
 using ShortURL.DataAccess.Entities;
 using ShortURL.DomainModel;
 using ShortURL.DomainModel.Entities;
+using ShortURL.DomainModel.Exceptions;
 using ShortURL.DomainModel.Utils;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,14 @@ namespace ShortURL.Business.Entities
 
         public ShortUrl MakeShortUrl(string originalUrl)
         {
+            //if(originalUrl.IndexOf("http") != 0)
+            //{
+            //    originalUrl = "http://" + originalUrl;
+            //}
+            if (!Uri.IsWellFormedUriString(originalUrl, UriKind.Absolute))
+            {
+                throw new InvalidUrlException();
+            }
             ShortUrl url = new ShortUrl
             {
                 Original = originalUrl,

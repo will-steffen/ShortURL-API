@@ -15,7 +15,9 @@ namespace ShortURL.DomainModel
         public static string DEFAULT_CONNECTION = "DefaultConnection";
         public static string SHORT_URL_CODE_LENGTH = "ShortUrlCodeLength";
         public static string NOT_FOUND_REDIRECT_URL = "NotFoundRedirectURL";
+        public static string NOT_FOUND_REDIRECT_INCLUDE_CODE= "NotFoundRedirectIncludeCode";
         public static string CORS_POLICY_NAME = "CORS_POLICY_NAME";
+        public static string FORCE_HTTPS_LINK = "ForceHttpsLink";
 
     }
 }
