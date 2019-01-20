@@ -14,10 +14,10 @@ namespace ShortURL.Business.Entities
     {
         public UserBusiness(UserDataAccess da) : base(da) { }
 
-        public User RequestNewUser(HttpContext httpContext)
+        public User RequestNewUser(string clientIp)
         {
             User user = new User();
-            user.Ip = ApplicationEnv.GetClientIP(httpContext);
+            user.Ip = clientIp;
             Save(user);
             return user;
         }

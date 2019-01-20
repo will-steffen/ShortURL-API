@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ShortURL.Api.DTO.Entities;
 using ShortURL.Business.Entities;
+using ShortURL.DomainModel;
 using ShortURL.DomainModel.Entities;
 using ShortURL.DomainModel.Exceptions;
 
@@ -24,7 +25,7 @@ namespace ShortURL.Api.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            User user = UserBusiness.RequestNewUser(HttpContext);
+            User user = UserBusiness.RequestNewUser(ApplicationEnv.GetClientIP(HttpContext));
             return Ok(new UserDTO(user));
         }
 

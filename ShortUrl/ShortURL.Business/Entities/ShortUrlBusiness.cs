@@ -72,12 +72,12 @@ namespace ShortURL.Business.Entities
             return code;
         }
 
-        public ShortUrl Clicked(string code, HttpContext httpContext)
+        public ShortUrl Clicked(string code, string clientIp)
         {
             ShortUrl url = FindByCode(code);
             Click click = new Click() {
                 ShortUrl = url,
-                Ip = ApplicationEnv.GetClientIP(httpContext)
+                Ip = clientIp
             };
             ClickBusiness.Save(click);
             return url;

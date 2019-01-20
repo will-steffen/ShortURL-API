@@ -28,7 +28,7 @@ namespace ShortURL.Api.Controllers
         {
             try
             {
-                ShortUrl url = ShortUrlBusiness.Clicked(code, HttpContext);
+                ShortUrl url = ShortUrlBusiness.Clicked(code, ApplicationEnv.GetClientIP(HttpContext));
                 return Redirect(url.Original);
             }
             catch (ShortUrlException e)
